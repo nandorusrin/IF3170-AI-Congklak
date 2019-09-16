@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Permainan Congkak</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="concrete.min.js"></script>
+    <script type="text/javascript" src="view.js"></script>
+</head>
+<body>
+
+<div style="display: flex; justify-content: center;">
+  <div id="congkakContainer"></div>
+</div>
+
+<script>
+  var viewport = new Concrete.Viewport({
+    container: document.getElementById('congkakContainer'),
+    width: 720,
+    height: 480
+  });
+
+  var bgLayer = new Concrete.Layer();
+  var beanLayer = new Concrete.Layer();
+  var textLayer = new Concrete.Layer();
+
+  viewport.add(bgLayer).add(beanLayer).add(textLayer);
+
+  CongkakBoard.createBoard(bgLayer, beanLayer, textLayer);
+  CongkakBoard.initCongkakBoard();
+
+  viewport.render();
+</script>
+
+</body>
+</html>
