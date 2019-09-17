@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>Permainan Congkak</title>
-    <style>
-    	* { padding: 0; margin: 0; }
-    	canvas { background: #eee; display: block; margin: 0 auto; }
-    </style>
-    <script type="text/javascript" src="common.js"></script>
-    <script type="text/javascript" src="concrete.min.js"></script>
-    <script type="text/javascript" src="view.js"></script>
+		<meta charset="utf-8" />
+		<title>Permainan Congkak</title>
+		<style>
+			* { padding: 0; margin: 0; }
+			canvas { background: #eee; display: block; margin: 0 auto; }
+		</style>
+		<script type="text/javascript" src="common.js"></script>
+		<script type="text/javascript" src="concrete.min.js"></script>
+		<script type="text/javascript" src="view.js"></script>
+		<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
+	<div id="container-GUI">
+		<p>CONGKLAK A.I</p>
+			<button>Player vs Player</button>
 
-<div style="display: flex; justify-content: center;">
-  <div id="congkakContainer"></div>
+			<br>
+			<label class="category">Player vs Bot</label><br>
+				<button>Random Bot</button><br>
+				<button>A.I Bot</button>
+		<label class="footer"><br>by <strong>IE, AY, NRP</strong></label>
+	</div>
+
+<div style="display: none; justify-content: center;">
+	<div id="congkakContainer"></div>
 </div>
 
 <script>
-  var viewport = new Concrete.Viewport({
-    container: document.getElementById('congkakContainer'),
-    width: 720,
-    height: 480
-  });
+	var viewport = new Concrete.Viewport({
+		container: document.getElementById('congkakContainer'),
+		width: 720,
+		height: 480
+	});
 
-  var bgLayer = new Concrete.Layer();
-  var beanLayer = new Concrete.Layer();
-  var textLayer = new Concrete.Layer();
+	var bgLayer = new Concrete.Layer();
+	var beanLayer = new Concrete.Layer();
+	var textLayer = new Concrete.Layer();
 
-  viewport.add(bgLayer).add(beanLayer).add(textLayer);
+	viewport.add(bgLayer).add(beanLayer).add(textLayer);
 
-  CongkakBoard.createBoard(bgLayer, beanLayer, textLayer);
-  CongkakBoard.initCongkakBoard();
+	CongkakBoard.createBoard(bgLayer, beanLayer, textLayer);
+	CongkakBoard.initCongkakBoard();
 
-  viewport.render();
+	viewport.render();
 </script>
 
 </body>
