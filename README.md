@@ -23,9 +23,9 @@ CARA BERMAIN CONGKLAK
 	Kampung pemain yang kalah di babak sebelumnya, <b>TERBAKAR</b>, artinya tidak dapat diisi oleh biji. Aturan <b>TERBAKAR</b>-nya <b>KAMPUNG</b> dimulai dari sebelah <b>KANAN</b> pemain bersangkutan. Jumlah biji pada babak ini sama dengan jumlah biji yang didapatkan ketika permainan <b>BABAK PERTAMA</b> berakhir.
 
 Pertanyaan:
-4.	Jika salah satu pemain sudah "mati", pemain lawan lanjut hingga tidak ada biji yang bisa diambil, kemudian dinyatakan "mati", dan lawan lanjut, ATAU begitu mengetahui salah satu pemain "mati", lawan langsung masuk fase memilih KAMPUNG-nya sendiri?
-4.	Apakah biji di <b>RUMAH</b> boleh diambil?
-5.	Setelah mengambil, pengisian biji lanjut dari tempat KAMPUNG pemain kehabisan biji atau sebelahnya KAMPUNG pemain lawan yang ia ambil bijinya?
-6.	Berakhir karena <i>movement</i> yang tidak memungkinkan ATAU SEMUA BIJI di KAMPUNG sudah habis?
+4.	Jika salah satu pemain sudah "mati", pemain lawan lanjut hingga tidak ada biji yang bisa diambil, kemudian dinyatakan "mati", dan lawan lanjut, ATAU begitu mengetahui salah satu pemain "mati", lawan langsung masuk fase memilih KAMPUNG-nya sendiri?<br>
+4.	Apakah biji di <b>RUMAH</b> boleh diambil?<br>
+5.	Setelah mengambil, pengisian biji lanjut dari tempat KAMPUNG pemain kehabisan biji atau sebelahnya KAMPUNG pemain lawan yang ia ambil bijinya<br>
+6.	Berakhir karena <i>movement</i> yang tidak memungkinkan ATAU SEMUA BIJI di KAMPUNG sudah habis?<br>
 
 Just open index.html in your browser
