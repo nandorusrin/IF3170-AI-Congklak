@@ -26,7 +26,7 @@ Pertanyaan:
 
 4.	Jika salah satu pemain sudah "mati", pemain lawan lanjut hingga tidak ada biji yang bisa diambil, kemudian dinyatakan "mati", dan lawan lanjut, ATAU begitu mengetahui salah satu pemain "mati", lawan langsung masuk fase memilih KAMPUNG-nya sendiri?<br>
 4.	Apakah biji di <b>RUMAH</b> boleh diambil?<br>
-5.	Setelah mengambil, pengisian biji lanjut dari tempat KAMPUNG pemain kehabisan biji atau sebelahnya KAMPUNG pemain lawan yang ia ambil bijinya<br>
-6.	Berakhir karena <i>movement</i> yang tidak memungkinkan ATAU SEMUA BIJI di KAMPUNG sudah habis?<br>
+5.	Setelah mengambil, pengisian biji lanjut dari tempat <b>KAMPUNG</b> pemain kehabisan biji atau sebelahnya <b>KAMPUNG</b> pemain lawan yang ia ambil bijinya<br>
+6.	Berakhir karena <i>movement</i> yang tidak memungkinkan ATAU <b>SEMUA</b> biji di <b>KAMPUNG</b> sudah habis?<br>
 
 Just open index.html in your browser
