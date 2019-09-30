@@ -71,7 +71,48 @@ function evalutionScore(states) {
 	return evaluationSum;
 }
 
+function generateAllStates(states) {
+	var villagesplayer1 = states.player1.villages;
+	var listOfStates = [];
+	for (var i = 0; i < 7; i++) {
+		if (villagesplayer1[i] !== 0) {
+			listOfStates.append(nextState(states, i));
+		}
+	}
+}
+
+function nextState(currState, idx) {
+	var hand = 0;
+	var pointer = idx;
+	var side = 1;
+
+	var newState = JSON.parse(JSON.stringify(currState));
+
+	hand = newState.player1.villages[idx];
+	newState.player1.villages[idx] = 0;
+	while (hand > 0) {
+		// gerak 
+		if (side === 1) {
+			pointer--;
+		} else {
+			pointer++;
+		}
+		hand--;
+		// di dalam home
+		if (pointer === (-1)) {
+			newState.player1.home++;
+		}
+		else if (side === 1) {
+			newState.player1.villages[pointer]++;
+		} else {
+			newState.player2.villages[pointer]++;
+		}
+	console.log(newState);
+	}
+}
+
 // test all function
 console.log(randomMove(states));
 console.log(aiMove(states));
 console.log("eval ",evalutionScore(states));
+nextState(states, 6);
