@@ -139,12 +139,8 @@ function nextState(currState, idx) {
 	}
 	//console.log(JSON.stringify(newState));
 
-	const returnVal = {
-		'state': newState,
-		'pointer': pointer
-	}
 
-	return returnVal;
+	return newState;
 }
 
 
