@@ -83,7 +83,65 @@ function generateAllStates(states) {
 	return listOfStates;
 }
 
-function nextState(currState, idx) {
+function nextStateEnemy(currState, idx){
+	//console.log(JSON.stringify(currState))
+	var hand = 0;
+	var round = false;
+	var pointer = idx;
+	var side = 2;
+
+	var newState = JSON.parse(JSON.stringify(currState));
+
+	hand = newState.player2.villages[idx];
+	newState.player2.villages[idx] = 0;
+	while (hand > 0) {
+		// gerak 
+		if (pointer === 7) {
+			side = 1;
+			pointer = 6;
+		} else if (side === 2) {
+			pointer++;
+		} else {
+			//pindah side dari 1 --> 2
+			if (pointer === 0) {
+				round = true;
+				side = 2;
+			} else {
+				pointer--;
+			}
+		}
+
+		hand--;
+		// di dalam home
+		if (pointer === 7) {
+			newState.player2.home++;
+		}
+		else if (side === 2) {
+			newState.player2.villages[pointer]++;
+		} else {
+			newState.player1.villages[pointer]++;
+		}
+		//
+		if (hand === 0) {
+			if (newState['player' + side].villages[pointer] > 1) {
+				hand = newState['player' + side].villages[pointer];
+				newState['player' + side].villages[pointer] = 0;
+			}
+		}
+		//console.log(JSON.stringify(newState), hand, pointer, side);
+	}
+
+	if (side === 2 && pointer < 7 && newState['player'+side].villages[pointer] === 1 && newState['player1'].villages[pointer] > 0){
+		newState['player2'].home += newState['player1'].villages[pointer] + newState['player2'].villages[pointer];
+		newState['player2'].villages[pointer] = 0;
+		newState['player1'].villages[pointer] = 0;
+
+	}
+	//console.log(JSON.stringify(newState));
+	return newState;
+}
+
+function nextStatePlayer(currState, idx) {
 	//console.log(JSON.stringify(currState))
 	var hand = 0;
 	var round = false;
@@ -144,7 +202,7 @@ function nextState(currState, idx) {
 }
 
 
-// test all function
+// test all functio
 //console.log(randomMove(states));
 //console.log(aiMove(states));
 //console.log("eval ",evaluationScore(states));

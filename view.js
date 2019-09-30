@@ -329,7 +329,6 @@ function sendMove(gameState, selected) {
   let round = false;
   let hand = takeBeans(side, pointer, this.state);
   let inHome = false;
-  let isNextTurn = true;
 
   // Board representation
   // 2 | 6 ... 0
@@ -382,16 +381,20 @@ function sendMove(gameState, selected) {
 
     // check if dead
     if (hand === 0 && (inHome || isDead(side, pointer, turn, round, this.state))) {
-      if (inHome) {
-        isNextTurn = false;
-      } else {
+      if (!inHome) {
         if (turn === 1 && side === 1) { // check kemungkinan nembak
           if (round && anyBeansInOppositeVillage(side, pointer, this.state)) {
-            hand = getBeansInOppositeVillage(side, pointer, this.state)
+            this.state['player1'].home += getBeansInOppositeVillage(side, pointer, this.state);
+            this.state['player1'].home += this.state['player1'].villages[pointer];
+            this.state['player1'].villages[pointer] = 0;
+            hand = 0;
           }
         } else if (turn === 2 && side === 2) {
           if (round && anyBeansInOppositeVillage(side, pointer, this.state)) {
-            hand = getBeansInOppositeVillage(side, pointer, this.state)
+            this.state['player2'].home += getBeansInOppositeVillage(side, pointer, this.state);
+            this.state['player2'].home += this.state['player2'].villages[pointer];
+            this.state['player2'].villages[pointer] = 0;  
+            hand = 0;
           }
         }
       }
@@ -402,12 +405,10 @@ function sendMove(gameState, selected) {
     if (hand <= 0) {
       this.updateCongkakDisplay(inHome ? -1: pointer , inHome ? -1 : side, hand)
       this.viewport.render();
-      if (isNextTurn) {
-        gameState.turn = (gameState.turn === 1) ? 2 : 1
-      }
+      gameState.turn = (gameState.turn === 1) ? 2 : 1
       clearInterval(nIntervId);
-      
     }
+  // }, 10);
   }, 500);
 }
 
