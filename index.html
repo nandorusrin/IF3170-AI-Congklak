@@ -7,13 +7,10 @@
 			* { padding: 0; margin: 0; }
 			canvas { background: #eee; display: block; margin: 0 auto; }
 		</style>
-		<script type="text/javascript" src="common.js"></script>
-		<script type="text/javascript" src="concrete.min.js"></script>
-		<script type="text/javascript" src="view.js"></script>
-		<link rel="stylesheet" type="text/css" href="index.css">
+		<!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
 </head>
 <body>
-	<div id="container-GUI">
+	<!-- <div id="container-GUI">
 		<p>CONGKLAK A.I</p>
 			<button>Player vs Player</button>
 
@@ -22,30 +19,66 @@
 				<button>Random Bot</button><br>
 				<button>A.I Bot</button>
 		<label class="footer"><br>by <strong>IE, AY, NRP</strong></label>
-	</div>
+	</div> -->
 	
 
-<div style="display: none;justify-content: center;">
+<div>
 	<div id="congkakContainer"></div>
 </div>
 
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="concrete.min.js"></script>
+<script type="text/javascript" src="model.js"></script>
+<script type="text/javascript" src="view.js"></script>
+<script type="text/javascript" src="controller.js"></script>
+
 <script>
-	var viewport = new Concrete.Viewport({
-		container: document.getElementById('congkakContainer'),
-		width: 720,
-		height: 480
-	});
+  // Global var
+  var gameState = {
+    turn: 1,
+    congkakState: {},
+    textStatus: '',
+    gameMode: '',
+    player: Array(2),
 
-	var bgLayer = new Concrete.Layer();
-	var beanLayer = new Concrete.Layer();
-	var textLayer = new Concrete.Layer();
+    player1SelectedVillage: -1,
+    player2SelectedVillage: -1
+  }
 
-	viewport.add(bgLayer).add(beanLayer).add(textLayer);
+  let communication = new CommunicationProtocol();
 
-	CongkakBoard.createBoard(bgLayer, beanLayer, textLayer);
-	CongkakBoard.initCongkakBoard();
+  let gameMode = "humanVShuman";  
+  if (gameMode === "humanVShuman") {
+    communication.assignPlayer("human", "human");
+  } else if (gameMode === "humanVSbotrandom") {
+    communication.assignPlayer("human", "botrandom");
+  } else if (gameMode === "humanVSbotai") {
+    communication.assignPlayer("human", "botai");
+  } else if (gameMode === "botrandomVSbotai") {
+    communication.assignPlayer("botrandom", "botai");
+  }
 
-	viewport.render();
+  var congkakContainer = document.getElementById('congkakContainer');
+
+  var viewport = new Concrete.Viewport({
+    container: congkakContainer,
+    width: 720,
+    height: 480
+  });
+
+  var bgLayer = new Concrete.Layer();
+  var beanLayer = new Concrete.Layer();
+  var textLayer = new Concrete.Layer();
+  var pointerLayer = new Concrete.Layer();
+
+  viewport.add(bgLayer).add(beanLayer).add(textLayer).add(pointerLayer);
+
+  CongkakBoard.createBoard(viewport, congkakContainer, bgLayer, beanLayer, textLayer, pointerLayer);
+  CongkakBoard.initCongkakBoard();
+  gameState.congkakState = CongkakBoard.state;
+
+  viewport.render();
+  startGame(congkakContainer);
 </script>
 
 </body>
