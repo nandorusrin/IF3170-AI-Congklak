@@ -13,7 +13,7 @@ let states = {
 let bobot = {
 	homeplayer1 : 10,
 	homeplayer2 : 10,
-	selisihvillage : 5
+	selisihvillage : 1
 }
 
 function randomMove(states) {
@@ -58,7 +58,7 @@ function aiMove(states) {
 	return heurs1[random];
 }
 
-function evalutionScore(states) {
+function evaluationScore(states) {
 	// shortcut
 	var homeplayer1 = states.player1.home;
 	var homeplayer2 = states.player2.home;
@@ -67,23 +67,26 @@ function evalutionScore(states) {
 	var selisihvillage12 = villagesplayer1.reduce((acc, a) => (acc + a), 0) - villagesplayer2.reduce((acc, a) => (acc + a), 0); 
 	// nilai evaluasi
 	var evaluationSum = (homeplayer1 * bobot.homeplayer1) - (homeplayer2 * bobot.homeplayer2) + (selisihvillage12 * bobot.selisihvillage);
-	console.log(evaluationSum);
+	//console.log(evaluationSum);
 	return evaluationSum;
 }
 
 function generateAllStates(states) {
 	var villagesplayer1 = states.player1.villages;
-	var listOfStates = [];
+	var listOfStates = {};
 	for (var i = 0; i < 7; i++) {
 		if (villagesplayer1[i] !== 0) {
-			listOfStates.append(nextState(states, i));
+			listOfStates[i] =  nextState(states, i);
+			//console.log(evaluationScore(listOfStates[i]));
 		}
 	}
+	return listOfStates;
 }
 
 function nextState(currState, idx) {
-	console.log(JSON.stringify(currState))
+	//console.log(JSON.stringify(currState))
 	var hand = 0;
+	var round = false;
 	var pointer = idx;
 	var side = 1;
 
@@ -99,12 +102,15 @@ function nextState(currState, idx) {
 		} else if (side === 1) {
 			pointer--;
 		} else {
+			//pindah side dari 2 --> 1
 			if (pointer === 6) {
+				round = true;
 				side = 1;
 			} else {
 				pointer++;
 			}
 		}
+
 		hand--;
 		// di dalam home
 		if (pointer === (-1)) {
@@ -122,14 +128,28 @@ function nextState(currState, idx) {
 				newState['player' + side].villages[pointer] = 0;
 			}
 		}
-		console.log(JSON.stringify(newState), hand, pointer, side);
+		//console.log(JSON.stringify(newState), hand, pointer, side);
 	}
-	console.log(JSON.stringify(newState));
+
+	if (side === 1 && pointer >= 0 && newState['player'+side].villages[pointer] === 1 && newState['player2'].villages[pointer] > 0){
+		newState['player1'].home += newState['player2'].villages[pointer] + newState['player1'].villages[pointer];
+		newState['player1'].villages[pointer] = 0;
+		newState['player2'].villages[pointer] = 0;
+
+	}
+	//console.log(JSON.stringify(newState));
+
+	const returnVal = {
+		'state': newState,
+		'pointer': pointer
+	}
+
+	return returnVal;
 }
 
 
 // test all function
-console.log(randomMove(states));
-console.log(aiMove(states));
-console.log("eval ",evalutionScore(states));
-nextState(states, 6);
+//console.log(randomMove(states));
+//console.log(aiMove(states));
+//console.log("eval ",evaluationScore(states));
+//nextState(states, 6);

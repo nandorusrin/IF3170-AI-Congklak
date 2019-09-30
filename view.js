@@ -435,11 +435,11 @@ class CongkakBoard {
   static state = {
     'player1': {
       'home': 0,
-      'villages': Array(7).fill(1)
+      'villages': Array(7).fill(7)
     },
     'player2': {
       'home': 0,
-      'villages': Array(7).fill(1)
+      'villages': Array(7).fill(7)
     }
   }
 
