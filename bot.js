@@ -82,6 +82,7 @@ function generateAllStates(states) {
 }
 
 function nextState(currState, idx) {
+	console.log(JSON.stringify(currState))
 	var hand = 0;
 	var pointer = idx;
 	var side = 1;
@@ -92,10 +93,17 @@ function nextState(currState, idx) {
 	newState.player1.villages[idx] = 0;
 	while (hand > 0) {
 		// gerak 
-		if (side === 1) {
+		if (pointer === (-1)) {
+			side = 2;
+			pointer = 0;
+		} else if (side === 1) {
 			pointer--;
 		} else {
-			pointer++;
+			if (pointer === 6) {
+				side = 1;
+			} else {
+				pointer++;
+			}
 		}
 		hand--;
 		// di dalam home
@@ -107,9 +115,18 @@ function nextState(currState, idx) {
 		} else {
 			newState.player2.villages[pointer]++;
 		}
-	console.log(newState);
+		//
+		if (hand === 0) {
+			if (newState['player' + side].villages[pointer] > 1) {
+				hand = newState['player' + side].villages[pointer];
+				newState['player' + side].villages[pointer] = 0;
+			}
+		}
+		console.log(JSON.stringify(newState), hand, pointer, side);
 	}
+	console.log(JSON.stringify(newState));
 }
+
 
 // test all function
 console.log(randomMove(states));
