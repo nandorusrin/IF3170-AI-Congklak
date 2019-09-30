@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 let states = {
 	'player1': {
 		'home': 0,
