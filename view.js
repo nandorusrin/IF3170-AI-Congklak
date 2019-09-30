@@ -408,8 +408,8 @@ function sendMove(gameState, selected) {
       gameState.turn = (gameState.turn === 1) ? 2 : 1
       clearInterval(nIntervId);
     }
-  // }, 10);
-  }, 500);
+  }, 10);
+  // }, 500);
 }
 
 class CongkakBoard {
@@ -436,11 +436,11 @@ class CongkakBoard {
   static state = {
     'player1': {
       'home': 0,
-      'villages': Array(7).fill(7)
+      'villages': Array(7).fill(12)
     },
     'player2': {
       'home': 0,
-      'villages': Array(7).fill(7)
+      'villages': Array(7).fill(12)
     }
   }
 
