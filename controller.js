@@ -40,7 +40,6 @@ function resumeGameExecution() {
 }
 
 function startGame(congkakContainer, mode="playerVSplayer") {
-
   if (mode === "playerVSplayer") {
     gameState.gameMode = 'playerVSplayer'
     gameState.player[0] = new Human(communication.player1Interface);
@@ -71,6 +70,7 @@ function startGame(congkakContainer, mode="playerVSplayer") {
       assert(villages && villages.length === 7);
       for (let i=0; i<7; i++) {
         const vill = villages[i];
+        // console.log(vill)
         if (Math.sqrt(Math.pow(x-vill.x, 2) + Math.pow(y-vill.y, 2)) <= vill.radius) {
           return i;
         }
@@ -83,6 +83,7 @@ function startGame(congkakContainer, mode="playerVSplayer") {
 
     const x = event.pageX - congkakContainer.offsetLeft,
           y = event.pageY - congkakContainer.offsetTop;
+    console.log(gameState)
     if (gameState.turn === 1) { // player 1 turn
       selectedVillage = isAHoleSelected(villagesConfig['player1'], x, y);
       if (selectedVillage !== -1 && gameState.congkakState['player1']['villages'][selectedVillage] > 0) {
