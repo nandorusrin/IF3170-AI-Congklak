@@ -38,3 +38,7 @@ button:hover{
 	line-height: 9px;
 	padding-top: 20px;
 }
+
+#congkakContainer {
+	display: none;
+}

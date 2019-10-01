@@ -7,24 +7,21 @@
 			* { padding: 0; margin: 0; }
 			canvas { background: #eee; display: block; margin: 0 auto; }
 		</style>
-		<!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
+		<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
-	<!-- <div id="container-GUI">
+	<div id="container-GUI">
 		<p>CONGKLAK A.I</p>
-			<button>Player vs Player</button>
-
-			<br>
-			<label class="category">Player vs Bot</label><br>
-				<button>Random Bot</button><br>
-				<button>A.I Bot</button>
-		<label class="footer"><br>by <strong>IE, AY, NRP</strong></label>
-	</div> -->
+			<button id="playerVSplayer" onclick="handleStart(this)">Player vs Player</button>
+      <button id="playerVSbotrandom" onclick="handleStart(this)">Player vs Random Bot</button>
+      <button id="playerVSbotai"  onclick="handleStart(this)">Player vs Minimax Bot</button>
+      <button id="botrandomVSbotai"  onclick="handleStart(this)">Random Bot vs Minimax Bot</button>
+	</div>
 	
 
-<div>
-	<div id="congkakContainer"></div>
-</div>
+  <div>
+    <div id="congkakContainer"></div>
+  </div>
 
 <script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="concrete.min.js"></script>
@@ -37,25 +34,13 @@
   var gameState = {
     turn: 1,
     congkakState: {},
-    textStatus: '',
     gameMode: '',
     player: Array(2),
 
     player1SelectedVillage: -1,
-    player2SelectedVillage: -1
-  }
+    player2SelectedVillage: -1,
 
-  let communication = new CommunicationProtocol();
-
-  let gameMode = "humanVShuman";  
-  if (gameMode === "humanVShuman") {
-    communication.assignPlayer("human", "human");
-  } else if (gameMode === "humanVSbotrandom") {
-    communication.assignPlayer("human", "botrandom");
-  } else if (gameMode === "humanVSbotai") {
-    communication.assignPlayer("human", "botai");
-  } else if (gameMode === "botrandomVSbotai") {
-    communication.assignPlayer("botrandom", "botai");
+    isEndGame: false,
   }
 
   var congkakContainer = document.getElementById('congkakContainer');
@@ -78,7 +63,7 @@
   gameState.congkakState = CongkakBoard.state;
 
   viewport.render();
-  startGame(congkakContainer);
+  // startGame(congkakContainer);
 </script>
 
 </body>
