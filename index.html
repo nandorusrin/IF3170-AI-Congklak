@@ -4,10 +4,12 @@
 		<meta charset="utf-8" />
 		<title>Permainan Congkak</title>
 		<style>
-			* { padding: 0; margin: 0; }
-			canvas { background: #eee; display: block; margin: 0 auto; }
+			#congkakContainer { padding: 0; margin-left:20%; margin-right: 20%; }
+			canvas { background: #FFFFFF; display: block; margin: 0 auto; }
 		</style>
 		<link rel="stylesheet" type="text/css" href="index.css">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+
 </head>
 <body>
 	<div id="container-GUI">
@@ -17,12 +19,12 @@
       <button id="playerVSbotai"  onclick="handleStart(this)">Player vs Minimax Bot</button>
       <button id="botrandomVSbotai"  onclick="handleStart(this)">Random Bot vs Minimax Bot</button>
     
-      <p style="text-decoration: underline;"><br>Difficulty</p>
+      <p><br>Difficulty</p>
     <form class="ai-difficulty">
-      <input type="radio" name="difficulty" value="easy-peasy" checked="checked"> Easy Peasy
-      <input type="radio" name="difficulty" value="easy"> Easy
-      <input type="radio" name="difficulty" value="medium"> Medium
-      <input type="radio" name="difficulty" value="hard"> Hard
+      <input type="radio" name="difficulty" value="easy-peasy" checked="checked"><label class="diff">Easy Peasy</label>
+      <input type="radio" name="difficulty" value="easy"><label class="diff">Easy</label>
+      <input type="radio" name="difficulty" value="medium"><label class="diff">Medium</label>
+      <input type="radio" name="difficulty" value="hard"><label class="diff">Hard</label>
     </form>
   </div>
 
@@ -58,7 +60,7 @@
 
   var bgLayer = new Concrete.Layer();
   var beanLayer = new Concrete.Layer();
-  var textLayer = new Concrete.Layer();
+  var textLayer = new Concrete.Layer(); 
   var pointerLayer = new Concrete.Layer();
 
   viewport.add(bgLayer).add(beanLayer).add(textLayer).add(pointerLayer);
