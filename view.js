@@ -170,7 +170,7 @@ function drawCounterText(canvas, ctx, pointer=-1, side=-1, hand=0, turn=1) {
     for (let i = 1; i <= 7; i++) {
       ctx.font = '17px arial';
       ctx.fillStyle = "#fcfcfc";
-      xOffset = (i >= 10) ? -4 : xOffset;
+      xOffset = (numbers[i] >= 10) ? -4 : xOffset;
       if (!isPlayer1) {
         ctx.fillText(numbers[7-i], canvas.width/2 + (-180 + i * 45) - 5 + xOffset, canvas.height/2 + yOffset);
       } else {
@@ -227,19 +227,44 @@ function updateCongkakDisplay(pointer=-1, side=-1, hand=0, turn=0) {
   this.drawCounterText(this.textCounterLayer.scene.canvas, this.textCounterLayer.scene.context, pointer, side, hand, turn)
 }
 
+function whoIsWon(state) {
+  let p1Score = state.player1.villages.reduce((acc, a) => (acc + a), 0) + state.player1.home
+  let p2Score = state.player2.villages.reduce((acc, a) => (acc + a), 0) + state.player2.home
+  if (p1Score > p2Score) {
+    return "1"
+  } else if (p1Score < p2Score) {
+    return "2"
+  } else {
+    return "Draw"
+  }
+}
+
 function drawTextInfo(canvas, ctx, turn) {
   if (turn !== 0) {
     ctx.beginPath();
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Player " + turn.toString() + " turn!", canvas.width/2 - 90, canvas.height/2 - 110);
+    const text = "Player " + turn.toString() + " turn!";
+    if (gameState.isEndGame) {
+      let endState = whoIsWon(gameState.congkakState);
+      if (endState === "Draw") {
+        ctx.fillText("Game Draw!", canvas.width/2 - 90, canvas.height/2 - 130);
+      } else {
+        ctx.fillText("Player " + endState + " WON!", canvas.width/2 - 90, canvas.height/2 - 130);
+      }
+    } else {
+      ctx.fillText(text, canvas.width/2 - 90, canvas.height/2 - 130);
+    }
     ctx.closePath();
   }
 }
 
 function drawPointer(canvas, ctx, villagesConfigPlayer, pointer, side, hand) {
-  if (pointer === -1 && side === -1) {
+  if (pointer < 0 || pointer > 6 || side === -1) {
     return;
   }
+
+  // console.log(pointer)
+  // assert(pointer >= 0 && pointer <= 6)
 
   let vill;
   if (side === 1) {
@@ -248,6 +273,7 @@ function drawPointer(canvas, ctx, villagesConfigPlayer, pointer, side, hand) {
     vill = villagesConfigPlayer['player2'][6-pointer];
   }
   
+  // console.log(vill, side, villagesConfigPlayer, pointer)
   let X = vill.x, Y = vill.y;
   
   ctx.fillStyle = "#4CAF50";
@@ -404,7 +430,7 @@ function sendMove(gameState, selected) {
           if (round && anyBeansInOppositeVillage(side, pointer, this.state)) {
             this.state['player2'].home += getBeansInOppositeVillage(side, pointer, this.state);
             this.state['player2'].home += this.state['player2'].villages[pointer];
-            this.state['player2'].villages[pointer] = 0;  
+            this.state['player2'].villages[pointer] = 0;
             hand = 0;
           }
         }
@@ -415,12 +441,26 @@ function sendMove(gameState, selected) {
 
     if (hand <= 0) {
       gameState.turn = (gameState.turn === 1) ? 2 : 1
+      console.log('di sini', JSON.stringify(gameState.congkakState))
+      console.log('label', totalBeans(gameState.congkakState), selected)
+      if (this.isTerminalState(gameState.congkakState)) {
+        gameState.isEndGame = true;
+        lock = true;
+      } else {
+        lock = false;
+      }
       this.updateCongkakDisplay(inHome ? -1: pointer , inHome ? -1 : side, hand, gameState.turn)
       this.viewport.render();
       clearInterval(nIntervId);
     }
-  // }, 10);
-  }, 250);
+  }, 10);
+  // }, 200);
+}
+
+function totalBeans(state) {
+  let p1Score = state.player1.villages.reduce((acc, a) => (acc + a), 0) + state.player1.home
+  let p2Score = state.player2.villages.reduce((acc, a) => (acc + a), 0) + state.player2.home
+  return p1Score + p2Score;
 }
 
 class CongkakBoard {
@@ -431,6 +471,12 @@ class CongkakBoard {
     this.beansLayer = beansLayer;
     this.textCounterLayer = textCounterLayer;
     this.pointerLayer = pointerLayer;
+  };
+
+  static isTerminalState(states) {
+    return (states.player1.villages.reduce((acc, a) => (acc + a), 0) === 0 || 
+            states.player2.villages.reduce((acc, a) => (acc + a), 0) === 0
+    );
   }
 
   static drawCongkakBoard = drawCongkakBoard;

@@ -10,6 +10,8 @@
 //   }
 // }
 
+var lock = false;
+
 function handleStart(obj) {
   document.getElementById("container-GUI").style.display = "none";
   document.getElementById("congkakContainer").style.display = "block";
@@ -21,9 +23,9 @@ function updateGameStatusText() {
   let newStatus = 'Player ' + gameState.turn + ': ';
   if (gameState.player[gameState.turn-1].type === 'human') {
     newStatus += 'Human turn'
-  } else if (gameState.player[gameState.turn-1].type === 'botrandom') {
+  } else if (gameState.player[gameState.turn-1].type === 'bot') {
     newStatus += 'Bot Random turn'
-  } else if (gameState.player[gameState.turn-1].type === 'botai') {
+  } else if (gameState.player[gameState.turn-1].type === 'bot') {
     newStatus += 'Bot AI turn'
   }
 }
@@ -31,7 +33,6 @@ function updateGameStatusText() {
 function resumeGameExecution() {
   let selected;
 
-  console.log(gameState)
   if (gameState.turn === 1) {
     selected = gameState.player1SelectedVillage;
     gameState.player1SelectedVillage = -1;
@@ -59,16 +60,41 @@ function startGame(congkakContainer, mode) {
     gameState.player[1] = new BotAI();
   } else if (mode === "botrandomVSbotai") {
     gameState.gameMode = 'botrandomVSbotai'
-    gameState.player[0] = new BotRandom();
-    gameState.player[1] = new BotAI();
+    // gameState.player[0] = new BotRandom();
+    // gameState.player[1] = new BotAI();
+
+    gameState.player[0] = new BotAI();
+    gameState.player[1] = new BotRandom();
+  }
+
+  function reverseState(state) {
+    let newState = {
+      'player1': {
+        'home': state.player2.home,
+        'villages': []
+      },
+      'player2': {
+        'home': state.player1.home,
+		    'villages': []
+      }
+    }
+
+    for (let i=0; i<7; i++) {
+      newState.player1.villages.push(state.player2.villages[i])
+      newState.player2.villages.push(state.player1.villages[i])
+    }
+
+    return newState;
   }
 
   let nIntervBotListener = setInterval(() => {
-    if (gameState.turn === 1 && gameState.player[0].type === "botrandom") {  // bot random gerak
+    if (!lock && gameState.turn === 1 && gameState.player[0].type === "bot") {  // bot random gerak
+      lock = true;
       gameState.player1SelectedVillage = gameState.player[0].move(gameState.congkakState)
       resumeGameExecution()
-    } else if (gameState.turn === 2  && (gameState.player[1].type === "botrandom" || gameState.player[1].type === "botai")) {
-      gameState.player2SelectedVillage = gameState.player[1].move(gameState.congkakState)
+    } else if (!lock && gameState.turn === 2  && (gameState.player[1].type === "bot" || gameState.player[1].type === "bot")) {
+      lock = true;
+      gameState.player2SelectedVillage = gameState.player[1].move(reverseState(gameState.congkakState))
       resumeGameExecution()
     }
   }, 1000);
