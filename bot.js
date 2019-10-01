@@ -208,10 +208,11 @@ function isTerminalState(states) {
 
 function minimaxDecision(state) {
 	let savedIdx;
+	let countStates = {'a' : 0};
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i)
-		temp = minValue(nextState, depth=0)
+		temp = minValue(nextState, countStates,depth=4)
 		console.log(temp, v)
 		if (temp > v) {
 			savedIdx = i;
@@ -219,21 +220,23 @@ function minimaxDecision(state) {
 		}
 		v = Math.max(v, temp)
 	}
-
+	console.log("banyak states : ", countStates);
 	return savedIdx;
 }
 
-function maxValue(state, depth) {
+function maxValue(state, n, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("y")
 	// }
 	if (isTerminalState(state) || depth === 0) {
+		n['a'] += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player1.villages[i] > 0) {
 			nextState = nextStatePlayer(state, i)
+			n['a'] += 1;
 			v = Math.max(v, minValue(nextState, depth-1))
 		}
 	}
@@ -241,17 +244,19 @@ function maxValue(state, depth) {
 	return v;
 }
 
-function minValue(state, depth) {
+function minValue(state, n, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("x")
 	// }
 	if (isTerminalState(state) || depth === 0) {
+		n['a'] += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player2.villages[i] > 0) {
 			nextState = nextStateEnemy(state, i)
+			n['a'] += 1;
 			v = Math.min(v, maxValue(nextState, depth-1))
 		}
 	}
