@@ -24,23 +24,21 @@ class BotRandom extends Bot {
   }
 
   move(states) {
-    //  shortcut
     var villages = states.player1.villages;
     // array for indeks of non-empty villages
     var pickVillages = new Array();
     var i;
+
     // search for indeks non-empty
     for (i = 0; i < states.player1.villages.length; i++) {
       if (villages[i] > 0) {
         pickVillages.push(i);
       }
     }
-    // test indeks non-empty
-    // console.log(pickVillages);
+
     // generate random indeks non-empty
     var random = Math.floor(Math.random() * pickVillages.length);
-    // return
-    // console.log(pickVillages[random])
+
     return pickVillages[random];
   }
 }
@@ -52,22 +50,15 @@ function evaluationScore(states) {
     selisihvillage : 1
   }
   
-  // shortcut
   var homeplayer1 = states.player1.home;
   var homeplayer2 = states.player2.home;
   var villagesplayer1 = states.player1.villages;
   var villagesplayer2 = states.player2.villages;
   var selisihvillage12 = villagesplayer1.reduce((acc, a) => (acc + a), 0) - villagesplayer2.reduce((acc, a) => (acc + a), 0); 
 
-  // let positionalScore = 0
-  // for (let i=0; i<7; i++) {
-  //   positionalScore += (!villagesplayer1[i]) ? ((7-i) * -1) : 0;
-  //   positionalScore += (!villagesplayer2[i]) ? i : 0;
-  // }
-
   // nilai evaluasi
   var evaluationSum = (homeplayer1 * bobot.homeplayer1) - (homeplayer2 * bobot.homeplayer2) + (selisihvillage12 * bobot.selisihvillage) // + positionalScore 
-  //console.log(evaluationSum);
+  
   return evaluationSum;
 }
 
@@ -116,7 +107,6 @@ function nextStateEnemy(currState, idx){
         newState['player' + side].villages[pointer] = 0;
       }
     }
-    //console.log(JSON.stringify(newState), hand, pointer, side);
   }
 
   if (side === 2 && pointer < 7 && newState['player'+side].villages[pointer] === 1 && newState['player1'].villages[pointer] > 0 && round){
@@ -125,7 +115,7 @@ function nextStateEnemy(currState, idx){
     newState['player1'].villages[pointer] = 0;
 
   }
-  //console.log(JSON.stringify(newState));
+
   return newState;
 }
 
@@ -200,11 +190,7 @@ function alphaBetaDecision(state, maxDepth) {
   for (let i=0; i<7; i++) {
     if (state.player1.villages[i] > 0) {
       let nextState = nextStatePlayer(state, i);
-      
-      // pake min
       let temp = minValue(nextState, alpha, beta, depth);
-      // pake max
-      // let temp = maxValue(nextState, alpha, beta, depth);
       if (temp > v) {
         savedIdx = i;
       }
@@ -212,7 +198,7 @@ function alphaBetaDecision(state, maxDepth) {
       v = Math.max(v, temp);
     }
   }
-  // console.log("isi savedIdx:", savedIdx)
+
   return savedIdx;
 }
 
@@ -224,7 +210,6 @@ function maxValue(state, alpha, beta, depth) {
   for (let i=0; i<7; i++) {
     if (state.player1.villages[i] > 0) {
       let nextState = nextStatePlayer(state, i)
-      // console.log('isi v', v)
       v = Math.max(v, minValue(nextState, alpha, beta, depth-1));
       if (v >= beta){
         return v;

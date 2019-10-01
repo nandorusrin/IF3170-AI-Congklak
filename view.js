@@ -136,8 +136,6 @@ function drawBeans(canvas, ctx) {
   }
 
   function drawBeanInVillage(index, quantity, isPlayer1=true) {
-    assert(index >= 0 && index <= 6);
-
     const yOffset = (isPlayer1) ? defaultUserYOffset : defaultEnemyYOffset;
     for (let iter = 0; iter < quantity; iter++) {
       drawIndividualBean(villageXOffsets[index], yOffset);
@@ -155,8 +153,6 @@ function drawBeans(canvas, ctx) {
     drawBeanInVillage(iter, this.state['player1'].villages[iter], isPlayer1=true);
     drawBeanInVillage(iter, this.state['player2'].villages[6-iter], isPlayer1=false);
   }
-
-  assert(this && this.state && this.state['player1'] && this.state['player2'], "State undefined in drawCounterText()")
 
   drawBeanInHome(this.state['player1']['home'], isPlayer1=true);
   drawBeanInHome(this.state['player2']['home'], isPlayer1=false);
@@ -202,7 +198,6 @@ function drawCounterText(canvas, ctx, pointer=-1, side=-1, hand=0, turn=1) {
     ctx.fillText(value, canvas.width/2 + xOffset, canvas.height/2 + 10);
   }
 
-  assert(this && this.state && this.state['player1'] && this.state['player2'], "State undefined in drawCounterText()")
   drawVillageHolesCounter(isPlayer1=true, this.state['player1']['villages']);
   drawVillageHolesCounter(isPlayer1=false, this.state['player2']['villages']);
 
@@ -263,9 +258,6 @@ function drawPointer(canvas, ctx, villagesConfigPlayer, pointer, side, hand) {
     return;
   }
 
-  // console.log(pointer)
-  // assert(pointer >= 0 && pointer <= 6)
-
   let vill;
   if (side === 1) {
     vill = villagesConfigPlayer['player1'][pointer];
@@ -273,12 +265,11 @@ function drawPointer(canvas, ctx, villagesConfigPlayer, pointer, side, hand) {
     vill = villagesConfigPlayer['player2'][6-pointer];
   }
   
-  // console.log(vill, side, villagesConfigPlayer, pointer)
   let X = vill.x, Y = vill.y;
+  var height = 40 * (Math.sqrt(3)/2);
   
   ctx.fillStyle = "#4CAF50";
 
-  var height = 40 * (Math.sqrt(3)/2);
   ctx.beginPath();
   if (side === 1) {
     Y += 40;
@@ -378,10 +369,8 @@ function sendMove(gameState, selected) {
     if (inHome) {
       if (turn === 1) {
         side = 2;
-        // pointer = 6;
       } else if (turn === 2) {
         side = 1;
-        // pointer = 6;
       }
       inHome = false;
     } else {
@@ -441,8 +430,6 @@ function sendMove(gameState, selected) {
 
     if (hand <= 0) {
       gameState.turn = (gameState.turn === 1) ? 2 : 1
-      console.log('di sini', JSON.stringify(gameState.congkakState))
-      console.log('label', totalBeans(gameState.congkakState), selected)
       if (this.isTerminalState(gameState.congkakState)) {
         gameState.isEndGame = true;
         lock = true;
@@ -453,14 +440,7 @@ function sendMove(gameState, selected) {
       this.viewport.render();
       clearInterval(nIntervId);
     }
-  }, 10);
-  // }, 200);
-}
-
-function totalBeans(state) {
-  let p1Score = state.player1.villages.reduce((acc, a) => (acc + a), 0) + state.player1.home
-  let p2Score = state.player2.villages.reduce((acc, a) => (acc + a), 0) + state.player2.home
-  return p1Score + p2Score;
+  }, 600);
 }
 
 class CongkakBoard {
@@ -506,7 +486,4 @@ class CongkakBoard {
     'player1': Array(7),
     'player2': Array(7),
   }
-
-  static player1 = "human";
-  static player2 = "human";
 }

@@ -25,13 +25,11 @@
       <input type="radio" name="difficulty" value="hard"> Hard
     </form>
   </div>
-	
 
-  <div>
+  <div style="display: flex; justify-content: center;">
     <div id="congkakContainer"></div>
   </div>
 
-<script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="concrete.min.js"></script>
 <script type="text/javascript" src="model.js"></script>
 <script type="text/javascript" src="view.js"></script>
@@ -42,7 +40,6 @@
   var gameState = {
     turn: 1,
     congkakState: {},
-    gameMode: '',
     player: Array(2),
 
     player1SelectedVillage: -1,
@@ -71,7 +68,6 @@
   gameState.congkakState = CongkakBoard.state;
 
   viewport.render();
-  // startGame(congkakContainer);
 </script>
 
 </body>
