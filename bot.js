@@ -200,6 +200,7 @@ function nextStatePlayer(currState, idx) {
 	return newState;
 }
 
+var i = 0;
 function isTerminalState(states) {
 	return (states.player1.villages.reduce((acc, a) => (acc + a), 0) === 0 || 
 					states.player2.villages.reduce((acc, a) => (acc + a), 0) === 0
@@ -208,35 +209,32 @@ function isTerminalState(states) {
 
 function minimaxDecision(state) {
 	let savedIdx;
-	let countStates = {'a' : 0};
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i)
-		temp = minValue(nextState, countStates,depth=4)
+		temp = minValue(nextState, depth=4)
 		console.log(temp, v)
 		if (temp > v) {
 			savedIdx = i;
-			console.log('savedindex', i)
+			//console.log('savedindex', i)
 		}
 		v = Math.max(v, temp)
 	}
-	console.log("banyak states : ", countStates);
 	return savedIdx;
 }
-
-function maxValue(state, n, depth) {
+function maxValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("y")
 	// }
 	if (isTerminalState(state) || depth === 0) {
-		n['a'] += 1;
+		i += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player1.villages[i] > 0) {
-			nextState = nextStatePlayer(state, i)
-			n['a'] += 1;
+			nextState = nextStatePlayer(state, i);
+			i += 1;
 			v = Math.max(v, minValue(nextState, depth-1))
 		}
 	}
@@ -244,19 +242,19 @@ function maxValue(state, n, depth) {
 	return v;
 }
 
-function minValue(state, n, depth) {
+function minValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("x")
 	// }
 	if (isTerminalState(state) || depth === 0) {
-		n['a'] += 1;
+		i += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player2.villages[i] > 0) {
 			nextState = nextStateEnemy(state, i)
-			n['a'] += 1;
+			i += 1;
 			v = Math.min(v, maxValue(nextState, depth-1))
 		}
 	}
@@ -265,6 +263,7 @@ function minValue(state, n, depth) {
 }
 
 console.log(minimaxDecision(states));
+console.log(i);
 
 // test all functio
 //console.log(randomMove(states));
