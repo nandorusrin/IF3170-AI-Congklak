@@ -58,14 +58,21 @@ function aiMove(states) {
 }
 
 function evaluationScore(states) {
-	// shortcut
 	var homeplayer1 = states.player1.home;
 	var homeplayer2 = states.player2.home;
 	var villagesplayer1 = states.player1.villages;
 	var villagesplayer2 = states.player2.villages;
+
 	var selisihvillage12 = villagesplayer1.reduce((acc, a) => (acc + a), 0) - villagesplayer2.reduce((acc, a) => (acc + a), 0); 
+
+	let positionalScore = 0
+	for (let i=0; i<7; i++) {
+		positionalScore += (!villagesplayer1[i]) ? ((7-i) * -1) : 0;
+		positionalScore += (!villagesplayer2[i]) ? i : 0;
+	}
+
 	// nilai evaluasi
-	var evaluationSum = (homeplayer1 * bobot.homeplayer1) - (homeplayer2 * bobot.homeplayer2) + (selisihvillage12 * bobot.selisihvillage);
+	var evaluationSum = (homeplayer1 * bobot.homeplayer1) - (homeplayer2 * bobot.homeplayer2) + (selisihvillage12 * bobot.selisihvillage) + positionalScore;
 	//console.log(evaluationSum);
 	return evaluationSum;
 }
@@ -229,7 +236,6 @@ function maxValue(state, depth) {
 	// }
 	j += 1;
 	if (isTerminalState(state) || depth === 0) {
-		
 		return evaluationScore(state);
 	}
 	let v = Number.NEGATIVE_INFINITY;

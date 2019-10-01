@@ -1,7 +1,6 @@
 // var gameState = {
 //   turn: 1,
 //   congkakState: {},
-//   textStatus: '',
 //   gameMode: '',
 //   player1: Object,
 //   player2: Object,
@@ -10,6 +9,12 @@
 //     player2SelectedVillage: -1,
 //   }
 // }
+
+function handleStart(obj) {
+  document.getElementById("container-GUI").style.display = "none";
+  document.getElementById("congkakContainer").style.display = "block";
+  startGame(congkakContainer, obj.id);
+}
 
 function updateGameStatusText() {
   assert(gameState.turn === 1 || gameState.turn === 2)
@@ -39,30 +44,38 @@ function resumeGameExecution() {
   CongkakBoard.sendMove(gameState, selected);
 }
 
-function startGame(congkakContainer, mode="playerVSplayer") {
+function startGame(congkakContainer, mode) {
   if (mode === "playerVSplayer") {
     gameState.gameMode = 'playerVSplayer'
-    gameState.player[0] = new Human(communication.player1Interface);
-    gameState.player[1] = new Human(communication.player2Interface);
-    gameState.textStatus = 'Player 1: Human turn'
+    gameState.player[0] = new Human();
+    gameState.player[1] = new Human();
   } else if (mode === "playerVSbotrandom") {
     gameState.gameMode = 'playerVSbotrandom'
-    gameState.player[0] = new Human(communication.player1Interface);
-    gameState.player[1] = new BotRandom(communication.player2Interface);
-    gameState.textStatus = 'Player 1: Human turn'
+    gameState.player[0] = new Human();
+    gameState.player[1] = new BotRandom();
   } else if (mode === "playerVSbotai") {
     gameState.gameMode = 'playerVSbotai'
-    gameState.player[0] = new Human(communication.player1Interface);
-    gameState.player[1] = new BotAI(communication.player2Interface);
-    gameState.textStatus = 'Player 1: Human turn'
+    gameState.player[0] = new Human();
+    gameState.player[1] = new BotAI();
   } else if (mode === "botrandomVSbotai") {
     gameState.gameMode = 'botrandomVSbotai'
-    gameState.player[0] = new BotRandom(communication.player1Interface);
-    gameState.player[1] = new BotAI(communication.player2Interface);
-    gameState.textStatus = 'Player 1: Bot Random Turn'
+    gameState.player[0] = new BotRandom();
+    gameState.player[1] = new BotAI();
   }
 
+  let nIntervBotListener = setInterval(() => {
+    if (gameState.turn === 1 && gameState.player[0].type === "botrandom") {  // bot random gerak
+      gameState.player1SelectedVillage = gameState.player[0].move(gameState.congkakState)
+      resumeGameExecution()
+    } else if (gameState.turn === 2  && (gameState.player[1].type === "botrandom" || gameState.player[1].type === "botai")) {
+      gameState.player2SelectedVillage = gameState.player[1].move(gameState.congkakState)
+      resumeGameExecution()
+    }
+  }, 1000);
+
   var villagesConfig = CongkakBoard.villagesConfig;
+
+
 
   congkakContainer.addEventListener('click', function(event) {
     function isAHoleSelected(villages, x, y) {
@@ -83,14 +96,13 @@ function startGame(congkakContainer, mode="playerVSplayer") {
 
     const x = event.pageX - congkakContainer.offsetLeft,
           y = event.pageY - congkakContainer.offsetTop;
-    console.log(gameState)
-    if (gameState.turn === 1) { // player 1 turn
+    if (gameState.turn === 1 && gameState.player[0].type === "human") { // player 1 turn
       selectedVillage = isAHoleSelected(villagesConfig['player1'], x, y);
       if (selectedVillage !== -1 && gameState.congkakState['player1']['villages'][selectedVillage] > 0) {
         gameState.player1SelectedVillage = selectedVillage;
         resumeGameExecution();
       }
-    } else if (gameState.turn === 2) {  // player 2 turn
+    } else if (gameState.turn === 2 && gameState.player[1].type === "human") {  // player 2 turn
       selectedVillage = isAHoleSelected(villagesConfig['player2'], x, y);
       if (selectedVillage !== -1 && gameState.congkakState['player2']['villages'][selectedVillage] > 0) {
         gameState.player2SelectedVillage = selectedVillage;
