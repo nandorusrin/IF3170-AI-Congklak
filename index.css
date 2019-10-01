@@ -1,9 +1,7 @@
 body{
 	font-family: Arial, Helvetica, sans-serif;
-	background-color: #FFEEE2;
 }
 p{
-	font-family: 'Quicksand', sans-serif;
 	text-align: center;
 	font-size: 20px;
 }
@@ -14,34 +12,16 @@ button{
 	border: 0px solid grey;
 	height: 40px;
 	margin: 6px 0px 6px 0px;
-	background-color: #FFA0A5;
+	background: rgb(161,240,255,1);
 	font-size: 14px;
 	border-radius: 5px;
-	transition: color 400ms ease-out;
-	transition: background-color 300ms ease-out;
 }
 button:hover{
-	background-color: #FF3273;
-	color: #FFFFFF;
-	font-size: 15px;
-	transition: color 400ms ease-out;
+	background: rgb(255,161,214,1);
 	transition: background-color 300ms ease-out;
 }
-input{
-	size: 125%;
-}
-.diff{
-	font-size: 14px;
-}
-.ai-difficulty{
-	margin: auto auto;
-	display: flex;
-	justify-content: space-around;
-	flex-direction: row;
-	align-items: baseline;
-}
+
 #container-GUI{
-	background-color: #D1FFFB;
 	margin: 10% auto 0px auto;
 	padding: 30px 40px 50px 40px;
 	width: 300px;
@@ -61,8 +41,4 @@ input{
 
 #congkakContainer {
 	display: none;
-	border-radius: 4px;
-	width: 720px;
-	height: 480px;
-	box-shadow: 0px 0px 9px 2px #BBBBBB;
 }
