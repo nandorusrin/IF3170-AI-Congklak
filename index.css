@@ -38,7 +38,12 @@ button:hover{
 	line-height: 9px;
 	padding-top: 20px;
 }
-
+.ai-difficulty{
+	font-size: 14px;
+	display: flex;
+	justify-content: space-around;
+	align-items: baseline;
+}
 #congkakContainer {
 	display: none;
 }
