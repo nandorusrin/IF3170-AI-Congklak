@@ -214,7 +214,7 @@ function alphaBetaDecision(state) {
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i);
 		temp = maxValue(nextState, 4);
-		console.log(temp, v);
+		console.log(alpha, beta);
 		if (temp > v) {
 			savedIdx = i;
 			console.log('savedindex', i);
