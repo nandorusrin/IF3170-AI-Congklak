@@ -199,19 +199,19 @@ function nextStatePlayer(currState, idx) {
 
 	return newState;
 }
-
 function isTerminalState(states) {
 	return (states.player1.villages.reduce((acc, a) => (acc + a), 0) === 0 || 
 					states.player2.villages.reduce((acc, a) => (acc + a), 0) === 0
 	);
 }
 
-function minimaxDecision(state) {
+function alphaBetaDecision(state) {
+	let countStates ={'a' : 0};
 	let savedIdx;
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i)
-		temp = minValue(nextState, depth=0)
+		temp = maxValue(nextState, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, countStates, depth=0)
 		console.log(temp, v)
 		if (temp > v) {
 			savedIdx = i;
@@ -219,47 +219,59 @@ function minimaxDecision(state) {
 		}
 		v = Math.max(v, temp)
 	}
-
+	console.log("banyak states : ", countStates);
 	return savedIdx;
 }
 
-function maxValue(state, depth) {
+function maxValue(state, alpha, beta, n, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("y")
 	// }
 	if (isTerminalState(state) || depth === 0) {
+		n['a'] +=1;
 		return evaluationScore(state);
 	}
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player1.villages[i] > 0) {
 			nextState = nextStatePlayer(state, i)
-			v = Math.max(v, minValue(nextState, depth-1))
+			n['a'] += 1;
+			v = Math.max(v, minValue(nextState, alpha, beta, n, depth-1))
+			if (v >= beta){
+				return v;
+			}
+			alpha = Math.max(alpha, v);
 		}
 	}
 
 	return v;
 }
 
-function minValue(state, depth) {
+function minValue(state, alpha, beta, n, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("x")
 	// }
 	if (isTerminalState(state) || depth === 0) {
+		n['a'] += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player2.villages[i] > 0) {
 			nextState = nextStateEnemy(state, i)
-			v = Math.min(v, maxValue(nextState, depth-1))
+			n['a'] += 1;
+			v = Math.min(v, maxValue(nextState, alpha, beta, depth-1))
+			if (v <= alpha){
+				return v;
+			}
+			beta = Math.min(beta, v);
 		}
 	}
 
 	return v;
 }
 
-console.log(minimaxDecision(states));
+console.log(alphaBetaDecision(states));
 
 // test all functio
 //console.log(randomMove(states));
