@@ -71,7 +71,7 @@ function evaluationScore(states) {
 	return evaluationSum;
 }
 
-function generateAllStates(states) {
+/*function generateAllStates(states) {
 	var villagesplayer1 = states.player1.villages;
 	var listOfStates = {};
 	for (var i = 0; i < 7; i++) {
@@ -81,7 +81,7 @@ function generateAllStates(states) {
 		}
 	}
 	return listOfStates;
-}
+}*/
 
 function nextStateEnemy(currState, idx){
 	//console.log(JSON.stringify(currState))
