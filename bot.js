@@ -199,6 +199,9 @@ function nextStatePlayer(currState, idx) {
 
 	return newState;
 }
+var j = 0;
+var alpha = Number.NEGATIVE_INFINITY;
+var beta = Number.POSITIVE_INFINITY;
 function isTerminalState(states) {
 	return (states.player1.villages.reduce((acc, a) => (acc + a), 0) === 0 || 
 					states.player2.villages.reduce((acc, a) => (acc + a), 0) === 0
@@ -206,37 +209,35 @@ function isTerminalState(states) {
 }
 
 function alphaBetaDecision(state) {
-	let countStates ={'a' : 0};
 	let savedIdx;
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
-		nextState = nextStatePlayer(state, i)
-		temp = maxValue(nextState, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, countStates, depth=2)
-		console.log(temp, v)
+		nextState = nextStatePlayer(state, i);
+		temp = maxValue(nextState, 4);
+		console.log(temp, v);
 		if (temp > v) {
 			savedIdx = i;
-			console.log('savedindex', i)
+			console.log('savedindex', i);
 		}
-		v = Math.max(v, temp)
+		v = Math.max(v, temp);
 	}
-	console.log("banyak states : ", countStates);
 	return savedIdx;
 }
 
-function maxValue(state, alpha, beta, n, depth) {
+function maxValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("y")
 	// }
 	if (isTerminalState(state) || depth === 0) {
-		n['a'] +=1;
+		j += 1;
 		return evaluationScore(state);
 	}
-	let v = Number.NEGATIVE_INFINITY;
+	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player1.villages[i] > 0) {
 			nextState = nextStatePlayer(state, i)
-			n['a'] += 1;
-			v = Math.max(v, minValue(nextState, alpha, beta, n, depth-1))
+			j += 1;
+			v = Math.max(v, minValue(nextState, depth-1));
 			if (v >= beta){
 				return v;
 			}
@@ -247,20 +248,20 @@ function maxValue(state, alpha, beta, n, depth) {
 	return v;
 }
 
-function minValue(state, alpha, beta, n, depth) {
+function minValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("x")
 	// }
 	if (isTerminalState(state) || depth === 0) {
-		n['a'] += 1;
+		j += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player2.villages[i] > 0) {
-			nextState = nextStateEnemy(state, i)
-			n['a'] += 1;
-			v = Math.min(v, maxValue(nextState, alpha, beta, depth-1))
+			nextState = nextStateEnemy(state, i);
+			j += 1;
+			v = Math.min(v, maxValue(nextState, depth-1));
 			if (v <= alpha){
 				return v;
 			}
@@ -272,7 +273,7 @@ function minValue(state, alpha, beta, n, depth) {
 }
 
 console.log(alphaBetaDecision(states));
-
+console.log(j);
 // test all functio
 //console.log(randomMove(states));
 //console.log(aiMove(states));
