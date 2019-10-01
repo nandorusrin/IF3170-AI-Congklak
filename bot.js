@@ -211,7 +211,7 @@ function alphaBetaDecision(state) {
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i)
-		temp = maxValue(nextState, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, countStates, depth=0)
+		temp = maxValue(nextState, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, countStates, depth=2)
 		console.log(temp, v)
 		if (temp > v) {
 			savedIdx = i;
