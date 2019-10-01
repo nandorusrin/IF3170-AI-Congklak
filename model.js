@@ -190,12 +190,12 @@ function isTerminalState(states) {
   );
 }
 
-function alphaBetaDecision(state) {
+function alphaBetaDecision(state, maxDepth) {
   var alpha = Number.NEGATIVE_INFINITY;
   var beta = Number.POSITIVE_INFINITY;
   let v = Number.NEGATIVE_INFINITY;
   
-  let depth = 5;
+  let depth = maxDepth;
   var savedIdx;
   for (let i=0; i<7; i++) {
     if (state.player1.villages[i] > 0) {
@@ -257,12 +257,20 @@ function minValue(state, alpha, beta, depth) {
 }
 
 class BotAI extends Bot {
-  constructor () {
+  constructor (difficulty) {
     super()
+    this.difficulty = 0;
+    if (difficulty === "easy") {
+      this.difficulty = 1;
+    } else if (difficulty === "medium") {
+      this.difficulty = 3;
+    } else if (difficulty === "hard") {
+      this.difficulty = 5;
+    }
   }
 
   move(states) {
-    const decision = alphaBetaDecision(states);
+    const decision = alphaBetaDecision(states, this.difficulty);
     return decision
   }
 }

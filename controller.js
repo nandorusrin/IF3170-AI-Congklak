@@ -15,7 +15,18 @@ var lock = false;
 function handleStart(obj) {
   document.getElementById("container-GUI").style.display = "none";
   document.getElementById("congkakContainer").style.display = "block";
-  startGame(congkakContainer, obj.id);
+  
+  let difficulty = "easy-peasy";
+  let elements = document.getElementsByName("difficulty");
+  for (let i=0; i<elements.length; i++) {
+    if (elements[i].checked) {
+      difficulty = elements[i].value;
+      break;
+    }
+  }
+  console.log(difficulty)
+
+  startGame(congkakContainer, obj.id, difficulty);
 }
 
 function updateGameStatusText() {
@@ -45,7 +56,7 @@ function resumeGameExecution() {
   CongkakBoard.sendMove(gameState, selected);
 }
 
-function startGame(congkakContainer, mode) {
+function startGame(congkakContainer, mode, difficulty) {
   if (mode === "playerVSplayer") {
     gameState.gameMode = 'playerVSplayer'
     gameState.player[0] = new Human();
@@ -57,14 +68,11 @@ function startGame(congkakContainer, mode) {
   } else if (mode === "playerVSbotai") {
     gameState.gameMode = 'playerVSbotai'
     gameState.player[0] = new Human();
-    gameState.player[1] = new BotAI();
+    gameState.player[1] = new BotAI(difficulty);
   } else if (mode === "botrandomVSbotai") {
     gameState.gameMode = 'botrandomVSbotai'
-    // gameState.player[0] = new BotRandom();
-    // gameState.player[1] = new BotAI();
-
-    gameState.player[0] = new BotAI();
-    gameState.player[1] = new BotRandom();
+    gameState.player[0] = new BotRandom();
+    gameState.player[1] = new BotAI(difficulty);
   }
 
   function reverseState(state) {

@@ -11,12 +11,20 @@
 </head>
 <body>
 	<div id="container-GUI">
-		<p>CONGKLAK A.I</p>
-			<button id="playerVSplayer" onclick="handleStart(this)">Player vs Player</button>
+    <p>CONGKLAK A.I</p>
+      <button id="playerVSplayer" onclick="handleStart(this)">Player vs Player</button>
       <button id="playerVSbotrandom" onclick="handleStart(this)">Player vs Random Bot</button>
       <button id="playerVSbotai"  onclick="handleStart(this)">Player vs Minimax Bot</button>
       <button id="botrandomVSbotai"  onclick="handleStart(this)">Random Bot vs Minimax Bot</button>
-	</div>
+    
+      <p style="text-decoration: underline;"><br>Difficulty</p>
+    <form class="ai-difficulty">
+      <input type="radio" name="difficulty" value="easy-peasy" checked="checked"> Easy Peasy
+      <input type="radio" name="difficulty" value="easy"> Easy
+      <input type="radio" name="difficulty" value="medium"> Medium
+      <input type="radio" name="difficulty" value="hard"> Hard
+    </form>
+  </div>
 	
 
   <div>
