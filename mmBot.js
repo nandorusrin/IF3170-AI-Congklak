@@ -1,11 +1,11 @@
 let states = {
 	'player1': {
 		'home': 0,
-		'villages': Array(7).fill(12)
+		'villages': Array(7).fill(7)
 	}, 
 	'player2': {
 		'home': 0,
-		'villages': Array(7).fill(12)
+		'villages': Array(7).fill(7)
 	}
 }
 
@@ -206,14 +206,15 @@ function isTerminalState(states) {
 					states.player2.villages.reduce((acc, a) => (acc + a), 0) === 0
 	);
 }
-
+let j = 0;
 function minimaxDecision(state) {
 	let savedIdx;
 	let v = Number.NEGATIVE_INFINITY;
+	j += 1;
 	for (let i=0; i<7; i++) {
 		nextState = nextStatePlayer(state, i)
-		temp = minValue(nextState, depth=10)
-		console.log(temp, v)
+		temp = minValue(nextState, depth=0)
+		//console.log(temp, v)
 		if (temp > v) {
 			savedIdx = i;
 			//console.log('savedindex', i)
@@ -226,15 +227,16 @@ function maxValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("y")
 	// }
+	j += 1;
 	if (isTerminalState(state) || depth === 0) {
-		i += 1;
+		
 		return evaluationScore(state);
 	}
 	let v = Number.NEGATIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player1.villages[i] > 0) {
 			nextState = nextStatePlayer(state, i);
-			i += 1;
+			// j += 1;
 			v = Math.max(v, minValue(nextState, depth-1))
 		}
 	}
@@ -246,15 +248,14 @@ function minValue(state, depth) {
 	// for (let j=0; j<depth; j++) {
 	// 	console.log("x")
 	// }
+	j += 1;
 	if (isTerminalState(state) || depth === 0) {
-		i += 1;
 		return evaluationScore(state);
 	}
 	let v = Number.POSITIVE_INFINITY;
 	for (let i=0; i<7; i++) {
 		if (state.player2.villages[i] > 0) {
 			nextState = nextStateEnemy(state, i)
-			i += 1;
 			v = Math.min(v, maxValue(nextState, depth-1))
 		}
 	}
@@ -263,7 +264,7 @@ function minValue(state, depth) {
 }
 
 console.log(minimaxDecision(states));
-console.log(i);
+console.log(j);
 
 // test all functio
 //console.log(randomMove(states));
