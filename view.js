@@ -162,7 +162,7 @@ function drawBeans(canvas, ctx) {
   drawBeanInHome(this.state['player2']['home'], isPlayer1=false);
 }
 
-function drawCounterText(canvas, ctx, pointer=-1, side=-1, hand=0) {
+function drawCounterText(canvas, ctx, pointer=-1, side=-1, hand=0, turn=1) {
   function drawVillageHolesCounter(isPlayer1, numbers) {
     let yOffset = (isPlayer1) ? 58 : -45;
     let xOffset = 0;
@@ -210,6 +210,8 @@ function drawCounterText(canvas, ctx, pointer=-1, side=-1, hand=0) {
   drawHomeHoleCounter(isPlayer1=false, value=this.state['player2']['home']);
 
   drawPointer(canvas, ctx, this.villagesConfig, pointer, side, hand);
+  
+  drawTextInfo(canvas, ctx, turn);
 }
 
 function initCongkakBoard() {
@@ -218,11 +220,20 @@ function initCongkakBoard() {
   this.drawCounterText(this.textCounterLayer.scene.canvas, this.textCounterLayer.scene.context)
 }
 
-function updateCongkakDisplay(pointer=-1, side=-1, hand=0) {
+function updateCongkakDisplay(pointer=-1, side=-1, hand=0, turn=0) {
   this.beansLayer.scene.clear();
   this.drawBeans(this.beansLayer.scene.canvas, this.beansLayer.scene.context)
   this.textCounterLayer.scene.clear();
-  this.drawCounterText(this.textCounterLayer.scene.canvas, this.textCounterLayer.scene.context, pointer, side, hand)
+  this.drawCounterText(this.textCounterLayer.scene.canvas, this.textCounterLayer.scene.context, pointer, side, hand, turn)
+}
+
+function drawTextInfo(canvas, ctx, turn) {
+  if (turn !== 0) {
+    ctx.beginPath();
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Player " + turn.toString() + " turn!", canvas.width/2 - 90, canvas.height/2 - 110);
+    ctx.closePath();
+  }
 }
 
 function drawPointer(canvas, ctx, villagesConfigPlayer, pointer, side, hand) {
@@ -335,7 +346,7 @@ function sendMove(gameState, selected) {
   // 1 | 0 ... 6
 
   let nIntervId = setInterval(() => {
-    this.updateCongkakDisplay(inHome ? -1: pointer, inHome ? -1 : side, hand)
+    this.updateCongkakDisplay(inHome ? -1: pointer, inHome ? -1 : side, hand, turn)
     this.viewport.render();
     // move CW
     if (inHome) {
@@ -403,13 +414,13 @@ function sendMove(gameState, selected) {
     }
 
     if (hand <= 0) {
-      this.updateCongkakDisplay(inHome ? -1: pointer , inHome ? -1 : side, hand)
-      this.viewport.render();
       gameState.turn = (gameState.turn === 1) ? 2 : 1
+      this.updateCongkakDisplay(inHome ? -1: pointer , inHome ? -1 : side, hand, gameState.turn)
+      this.viewport.render();
       clearInterval(nIntervId);
     }
-  }, 10);
-  // }, 500);
+  // }, 10);
+  }, 250);
 }
 
 class CongkakBoard {
@@ -436,11 +447,11 @@ class CongkakBoard {
   static state = {
     'player1': {
       'home': 0,
-      'villages': Array(7).fill(12)
+      'villages': Array(7).fill(7)
     },
     'player2': {
       'home': 0,
-      'villages': Array(7).fill(12)
+      'villages': Array(7).fill(7)
     }
   }
 
